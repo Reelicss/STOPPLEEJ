@@ -1,0 +1,9 @@
+-- NONE Platform (Remove)
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+local PltInstance = workspace:FindFirstChild("PlatformFolder_" .. Player.UserId)
+if PltInstance then
+	PltInstance:Destroy()
+end
