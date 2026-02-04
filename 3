@@ -1,0 +1,50 @@
+
+-- MINECRAFT SAND BASEPLATE
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+-- Remove existing platform
+local old = workspace:FindFirstChild("PlatformFolder_" .. Player.UserId)
+if old then
+	old:Destroy()
+end
+
+local character = Player.Character or Player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+-- Exact Y positioning (same as Empty Tools)
+local center, size = character:GetBoundingBox()
+local offset = hrp.Position.Y - (center.Y - size.Y / 2)
+local yPos = hrp.Position.Y - offset - (3 / 2) - 0.1
+
+-- Folder
+local folder = Instance.new("Folder")
+folder.Name = "PlatformFolder_" .. Player.UserId
+folder.Parent = workspace
+
+-- Sand color (Minecraft-like)
+local sandColor = Color3.fromRGB(219, 211, 160)
+
+-- Create 3x3 sand baseplates
+for dx = -1, 1 do
+	for dz = -1, 1 do
+		local p = Instance.new("Part")
+		p.Size = Vector3.new(2048, 3, 2048)
+		p.Anchored = true
+		p.CanCollide = true
+		p.CastShadow = false
+
+		p.Material = Enum.Material.Sand
+		p.Color = sandColor
+		p.Transparency = 0
+
+		p.Position = Vector3.new(
+			hrp.Position.X + dx * 2048,
+			yPos,
+			hrp.Position.Z + dz * 2048
+		)
+
+		p.Parent = folder
+	end
+end
