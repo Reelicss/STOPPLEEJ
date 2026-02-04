@@ -1,0 +1,46 @@
+-- OPAQUE Platform (Empty Tools - Fixed)
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+-- Remove existing platform
+local PltInstance = workspace:FindFirstChild("PlatformFolder_" .. Player.UserId)
+if PltInstance then
+	PltInstance:Destroy()
+end
+
+local character = Player.Character or Player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+-- Calculate Y position (same as Empty Tools)
+local center, size = character:GetBoundingBox()
+local offset = hrp.Position.Y - (center.Y - size.Y / 2)
+local extra = 0.1
+local yPos = hrp.Position.Y - offset - (3 / 2) - extra
+
+-- Create folder
+local folder = Instance.new("Folder")
+folder.Name = "PlatformFolder_" .. Player.UserId
+folder.Parent = workspace
+
+-- Create 3x3 giant opaque platform
+for dx = -1, 1 do
+	for dz = -1, 1 do
+		local p = Instance.new("Part")
+		p.Size = Vector3.new(2048, 3, 2048)
+		p.Anchored = true
+		p.CanCollide = true
+		p.CastShadow = false
+		p.Transparency = 0
+		p.Material = Enum.Material.Concrete
+		p.Color = Color3.fromRGB(100, 100, 100)
+
+		p.Position = Vector3.new(
+			hrp.Position.X + dx * 2048,
+			yPos,
+			hrp.Position.Z + dz * 2048
+		)
+
+		p.Parent = folder
+	end
+end
